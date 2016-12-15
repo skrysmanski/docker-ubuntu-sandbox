@@ -1,0 +1,2 @@
+include aptnorecommends
+include zsh

@@ -2,16 +2,11 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/etc/oh-my-zsh
-export ZSH_CACHE_DIR="$HOME/.oh-my-zsh/cache"
+export ZSH=/root/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# maran
-# pgymalion
-# ys
-# xxf
 ZSH_THEME="ys"
 
 # Uncomment the following line to use case-sensitive completion.
