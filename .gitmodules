@@ -1,0 +1,3 @@
+[submodule "files/puppet-modules/zsh/files/oh-my-zsh"]
+	path = files/puppet-modules/zsh/files/oh-my-zsh
+	url = https://github.com/robbyrussell/oh-my-zsh.git

@@ -1,0 +1,161 @@
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" /etc/vim/vimrc.local
+"
+" Diese Datei wird von der Datei /etc/vim/vimrc eingebunden. Daher kann es sein,
+" dass das Auskommentieren von einigen der hier eingetragenen Optionen keine
+" Auswirkung hat, da die Option bereits in der vimrc definiert wurde. Für mehr
+" Informationen, siehe auch "Debian-Clean.txt".
+"
+" Diese Datei kann auch als Benutzer-Datei eingebunden werden, und zwar unter:
+"
+"   ~/.vimrc
+"
+" Um den Inhalt dieser Datei direkt in Vim (mit einer leeren "vimrc"-Datei) 
+" einzufügen, muss man zuvor folgenden Befehl eingeben:
+"
+"   :set paste
+"
+" Die Beschreibung der Optionen findet sich hier:
+"
+"   http://vimdoc.sourceforge.net/htmldoc/options.html
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"-------------------------------------------------------------------------------
+" Verschiedene Optionen
+"-------------------------------------------------------------------------------
+" Erlaube das Verwenden der Backspace-Taste auch über Zeilenumbrüche hinweg.
+set backspace=indent,eol,start 
+
+set textwidth=0   " Deaktiviert automatische Zeilenumbrüche
+set autoindent    " Aktiviere automatische Einrückung
+set nobackup      " Keine Backups von den bearbeiteten Dateien anlegen
+set history=50    " Die letzten 50 Commands merken
+set ruler         " In der unteren rechten Ecke werden die aktuelle Zeile und 
+                  " die aktuelle Spalte angezeigt.
+set showmode      " Aktueller Modus (EINFÜGEN; VISUELL) wird unten links 
+                  " angezeigt.
+set showcmd       " Zeigt zusätzliche Informationen im Visual-Modus an.
+set incsearch     " Im Such-Modus springt Vim direkt zur ersten Fundstelle des
+                  " Suchausdrucks während dieser eingegeben wird. (Also nicht 
+                  " erst, wenn die Suche mit Enter bestätigt wird.)
+set ignorecase    " Bei der Suche wird Klein-/Großschreibung ignoriert.
+set showmatch     " Hebe zugehörige Klammern hervor.
+
+" Zeige Dateinamen immer an
+set ls=2          " In Vim selbst
+set title         " Dateinamen in der Terminal-Titelleiste anzeigen (geht nicht
+                  " bei allen Terminals)
+
+" InsertMode: Man kann direkt schreiben und muss nicht erst die Taste "i" 
+" drücken, um in den Schreibmodus zu kommen. Um den Schreibmodus wieder zu 
+" verlassen verwendert man "Strg+O" (ein Befehl) oder "Strg+L" (mehrere 
+" Befehle).
+set insertmode
+
+" Modelines aktivieren
+" Siehe: http://vimdoc.sourceforge.net/htmldoc/options.html#modeline
+set modeline
+
+" Folding abschalten da es einfach nur nervt, wenn man gefoldete
+" Dateien erst komplett manuell "unfolden" muss.
+set nofoldenable
+
+" Don't use Ex mode, use Q for formatting (?)
+map Q gq 
+
+"-------------------------------------------------------------------------------
+" Zeilen-Handling
+"-------------------------------------------------------------------------------
+set number        " Zeilennummern vor den Zeilen anzeigen; das ist zwar ein
+                  " nettes Feature, aber es macht Probleme beim Kopieren aus dem
+                  " Terminal herraus, da dann die Zeilennummern mitkopiert 
+                  " werden würden - und das ist schlecht. Deshalb können die
+                  " Zeilennummern mit F9 (im Befehlsmodus) deaktiviert und
+                  " mit F10 wieder aktiviert werden. (Gleichzeitig wird aus
+                  " das Auto-Indent ein- bzw. ausgeschaltet - mittels 
+                  " "Paste"-Modus.)
+map <F9> :set nonumber paste<CR>
+map <F10> :set number nopaste<CR>
+
+" Umbrechen von Zeilen geschieht nicht mehr mitten im Wort sondern zwischen
+" den Wörtern
+set wrap
+set linebreak
+
+
+" Nur falls "autocommands" einkompiliert sind
+if has("autocmd")
+  " Immer zur letzten bekannten Position beim Editieren einer Datei springen
+  " (nur falls Position gültig und nicht in einem Event-Handler)
+  autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal g`\"" |
+    \ endif
+endif
+
+"-------------------------------------------------------------------------------
+" Syntax-Highlighting
+"-------------------------------------------------------------------------------
+" Aktiviere Syntax-Highlighting, wenn das Terminal Farben unterstützt.
+if &t_Co > 2 || has("gui_running") 
+  " Syntax-Highlighting aktivieren
+  syntax on 
+  " Suchergebnisse hervorheben.
+  set hlsearch
+  " Verändert die verwendeten Farben von Vim, so dass diese auf dunklen
+  " Terminal-Hintergründen besser lesbar sind.
+  set background=dark  
+  " Mit F5 wird die aktuelle Hervorhebung von Suchbegriffen wieder entfernt.
+  map <F5> :nohlsearch<CR>
+endif 
+
+"-------------------------------------------------------------------------------
+" Such- und Ersetzungs-Optionen
+"-------------------------------------------------------------------------------
+
+" Beim Suchen über Textanfang/ende hinausspringen
+" (Meldung: "Suche erreichte ANFANG/ENDE und wurde am ENDE/ANFANG fortgesetzt")
+set wrapscan
+
+" Suche NICHT case-senitiv, außer ein Grossbuchstabe steht im Suchmuster
+" SmartCase, SMARTcase, smartCASE, SmArTcAsE, sMaRtCaSe, smartcase
+set ignorecase
+set smartcase
+
+" Während Eingabe eines Suchmusters bereits suchen (inkrementell)
+" Alle zu einem Suchmuster passenden Textstücke markieren (highlight)
+" :nohlsearch schaltet Markierungen wieder ab
+set incsearch
+set hlsearch
+
+"-------------------------------------------------------------------------------
+" White-Space-Zeichen
+"-------------------------------------------------------------------------------
+set tabstop=2     " Tabulatorbreite in Leerzeichen
+set shiftwidth=2  " Einrücktiefe in Leerzeichen
+set expandtab     " Beim Einfügen von Tabs, diese durch Leerzeichen ersetzen.
+" bei Makefiles braucht man TABs
+au BufNewFile,BufReadPost Makefile se noexpandtab
+
+"-------------------------------------------------------------------------------
+" Keybindings
+" ------------------------------------------------------------------------------
+
+" Enable Ctrl+Z as undo and Ctrl+Y as redo
+" NOTE: The current tty must have executed "stty susp undef" for this to work.
+inoremap <c-z> <c-o>:u<CR>
+inoremap <c-y> <c-o><c-r>
+
+
+"-------------------------------------------------------------------------------
+" Maus-Unterstützung
+"-------------------------------------------------------------------------------
+set mouse=a            " Maus-Unterstützung (inkl. Scrollrad) aktivieren;
+                       " HINWEIS: Um mit Putty bei aktivierter Mausunterstützung
+                       " trotzdem etwas zu kopieren, muss die SHIFT-Taste 
+                       " gedrückt gehalten werden. (siehe Putty -> Optionen ->
+                       " Window -> Selection)
+set mousemodel=extend  " Standard-Maus-Modell; die anderen funktionieren in
+                       " Putty nicht.

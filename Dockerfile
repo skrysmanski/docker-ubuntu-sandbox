@@ -1,7 +1,7 @@
-FROM krys/ubuntu-base
+FROM krys/ubuntu-puppet-base
 
 # Install some useful software package.
-RUN DEBIAN_FRONTEND=noninteractive  apt-get install -y --no-install-recommends \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 		command-not-found \
 		apt-file \
 		psmisc \
