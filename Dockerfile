@@ -16,6 +16,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 		mercurial \
 		subversion
 
+# Install "dialog" frontend for interactive apt-get calls
+# (gets rid of the "No usable dialog-like program is installed" errors)
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends whiptail
+
 # Update "apt-file" index
 RUN apt-file update
 
@@ -26,3 +30,4 @@ COPY files /
 RUN /puppet-apply.sh site.pp
 
 CMD [ "zsh" ]
+
